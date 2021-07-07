@@ -69,7 +69,7 @@ function odradiUplatu(id){
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({id})
         };
-        return fetch("http://localhost:8080/api/getAccbyID", requestOptions)
+        return fetch("/api/getAccbyID", requestOptions)
         .then(handleResponse)
         .then(odgovor=>{return odgovor})
     }
