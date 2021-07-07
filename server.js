@@ -29,9 +29,11 @@ app.use(morgan("tiny"));
 
 require("./rute/api")(app);
 
-if(process.env.NODE_ENV==='production'){
-    app.use(express.static('client/build'));
-
-}
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(resolve(process.cwd(), 'client/build')))
+    app.get('*', (req, res) => {
+      res.sendFile(resolve(process.cwd(), 'client/build/index.html'))
+    })
+  }
 
 app.listen(PORT, console.log(`Server je pokrenut na portu: ${PORT}.`));
