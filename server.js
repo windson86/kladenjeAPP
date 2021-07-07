@@ -25,7 +25,9 @@ app.use(cors());
 
 app.use(morgan("tiny"));
 
-
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 require("./rute/api")(app);
 
