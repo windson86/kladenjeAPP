@@ -96,7 +96,7 @@ class Register extends React.Component {
                         <Link to="/login" className="btn btn-link">Cancel</Link>
                     </div>
                 </form>
-            </div>
+            </div> 
         );
     }
 }
