@@ -20,13 +20,13 @@ function spremiNovuOkladu(oklada) {
         body: JSON.stringify(oklada)
     };
         console.log(oklada)
-    return fetch("http://localhost:8080/api/dodajOkladu", requestOptions).then(odgovor=>{console.log(odgovor)});
+    return fetch("/api/dodajOkladu", requestOptions).then(odgovor=>{console.log(odgovor)});
    
 
 };
 
 function prikazsvihSlobodnihOklada(){
-    return fetch("http://localhost:8080/api/get/allOklade")
+    return fetch("/api/get/allOklade")
     .then(handleResponse)
     }
 
@@ -39,7 +39,7 @@ function odradiUplatu(id){
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({id})
     };
-    return fetch("http://localhost:8080/api/odradiUplatu", requestOptions)
+    return fetch("/api/odradiUplatu", requestOptions)
     
     .then(odgovor=>{return odgovor})
 
@@ -47,7 +47,7 @@ function odradiUplatu(id){
 
 
     function prikazsvihUplataZahtjeva(){
-        return fetch("http://localhost:8080/api/get/allUplate")
+        return fetch("/api/get/allUplate")
         .then(handleResponse)
         }
 
@@ -57,7 +57,7 @@ function odradiUplatu(id){
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({username,kolicina,odradeno:false})
         };
-        return fetch("http://localhost:8080/api/zahtjevUplate", requestOptions)
+        return fetch("/api/zahtjevUplate", requestOptions)
         .then(handleResponse)
         .then(odgovor=>{return odgovor})
 
@@ -81,7 +81,7 @@ function odradiUplatu(id){
             body: JSON.stringify({id})
         };
 
-        return fetch("http://localhost:8080/api/isAdmin", requestOptions)
+        return fetch("/api/isAdmin", requestOptions)
         .then(handleResponse)
         .then(odgovor=>{return odgovor})
     }
@@ -93,7 +93,7 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch("http://localhost:8080/api/login", requestOptions)
+    return fetch("/api/login", requestOptions)
         .then(handleResponse)
         .then(user => {
             
@@ -111,7 +111,7 @@ function register(user) {
         body: JSON.stringify(user)
     };
         
-    return fetch("http://localhost:8080/api/save", requestOptions).then(handleResponse);
+    return fetch("/api/save", requestOptions).then(handleResponse);
    
 
 }
