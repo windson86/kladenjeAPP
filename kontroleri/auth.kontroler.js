@@ -6,6 +6,39 @@ const ZahtjevUplate = require("../modeli/zahtjeviZaUplatu")
 const OkladaDvaTip = require("../modeli/2tip.oklade")
 
 
+
+
+
+
+
+
+exports.izracunajOkladu = (req,res) =>{
+  const prvitip=req.body.oklada.prviIshod;
+  const drugitip=req.body.oklada.drugiIshod;
+  const oklada=req.body.oklada;
+ 
+  var dobitniTip="";
+ var dobitniOmjer=1;
+  var r = Math.random()*100;
+ if(r<prvitip){dobitniTip=oklada.opisPrvogIshoda;dobitniOmjer=prvitip}
+else{dobitniTip= oklada.opisDrugogIshoda;dobitniOmjer=drugitip}
+
+      OkladaDvaTip.findOne({_id:req.body.oklada._id},(err,oklada)=>{
+        if(err){res.status(500).send({message : err});return;}
+       
+        oklada.dobitniTip=dobitniTip
+        oklada.dobitniOmjer=dobitniOmjer
+        oklada.save()
+        
+      })
+  
+      res.send({odgovor:dobitniTip})
+ 
+
+}
+
+
+
 exports.dohvatiSlobodneOklade = (req,res) =>{
   OkladaDvaTip.find({})
   .exec((err,oklade)=>{
@@ -29,12 +62,12 @@ exports.uplatiNaRacun = (req,res) =>{
       if(err){res.status(500).send({message : err});return;}
       uplata.save().then(
         
-        Kladitelj.findOne({username:uplata.username}, (err, doc) => {
+        Kladitelj.findOne({username:uplata.username}, (err, kladitelj) => {
           
             if(err){res.status(500).send({message : err});return;}
           
-          doc.novcanik=doc.novcanik+uplata.kolicina
-            doc.save()
+          kladitelj.novcanik=kladitelj.novcanik+uplata.kolicina
+            kladitelj.save()
          
       })
       )
@@ -98,7 +131,10 @@ exports.GetAccByID = (req,res)=>{
     if(err){res.status(500).send({message : err});return;}
    
    if(kladitelj){
-    res.send({novcanik:kladitelj.novcanik})}
+    res.send({
+      novcanik:kladitelj.novcanik,
+      listici:kladitelj.listici
+    })}
   })
 };
 
@@ -122,7 +158,7 @@ exports.signin= (req,res) => {
                       message: "Invalid Password!"
                     });
                   }
-    var token = jwt.sign({ mail: kladitelj.email }, config.secret, {
+    var token = jwt.sign({ id: kladitelj._id }, config.secret, {
                     expiresIn: 86400 // 24 hours
                   }); 
                 

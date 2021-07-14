@@ -1,5 +1,5 @@
-//problem s gitom
 
+import { Redirect } from 'react-router-dom';
 export const userService = {
     register,
     logout,
@@ -10,9 +10,30 @@ export const userService = {
     prikazsvihUplataZahtjeva,
     odradiUplatu,
     spremiNovuOkladu,
-    prikazsvihSlobodnihOklada
+    prikazsvihSlobodnihOklada,
+    izracunOklade,
+    igrajListic
    
 };
+function igrajListic(ulog,listic,id){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ulog,listic,id})
+    };
+    return fetch("/api/igrajListic", requestOptions).then(handleResponse);
+}
+
+function izracunOklade(oklada,id){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({oklada,id})
+    };
+   
+    return fetch("/api/izracunajOkladu", requestOptions).then(handleResponse);
+}
+
 function spremiNovuOkladu(oklada) {
     const requestOptions = {
         method: 'POST',
@@ -98,7 +119,8 @@ function login(username, password) {
         .then(user => {
             
             localStorage.setItem('user', JSON.stringify(user));
-            window.location.reload();   
+            <Redirect to='/home' />
+          
             return user;
         });
 };

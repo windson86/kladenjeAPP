@@ -1,7 +1,7 @@
-const { provjeraRegistracije } = require("../middle");
+const { provjeraRegistracije,provjeraAdmina } = require("../middle");
 
 const kontroler = require("../kontroleri/auth.kontroler");
-
+const okladeKontroler = require ("../kontroleri/oklade.kontroler")
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
@@ -18,6 +18,12 @@ module.exports = function(app) {
     ],
     kontroler.signup
   );
+
+  app.post("/api/izracunajOkladu",
+  [provjeraRegistracije.provjeraAdmina],
+  kontroler.izracunajOkladu); 
+
+  app.post("/api/igrajListic", okladeKontroler.upisListica);
 
   app.post("/api/isAdmin", kontroler.isAdmin);
 

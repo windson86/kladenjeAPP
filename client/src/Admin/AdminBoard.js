@@ -10,13 +10,16 @@ export default class AdminBoard extends React.Component {
   
   
       this.state = {
+        oklade:[],
         oklada: {
           opisOklade: '',
           opisPrvogIshoda:"",
           prviIshod:0.5,
           opisDrugogIshoda:"",
-          drugiIshod:0.5
+          drugiIshod:0.5,
+          dobitniTip:""
       },
+
         uplate:[],
         isAdmin:false,
       
@@ -26,8 +29,9 @@ export default class AdminBoard extends React.Component {
   }
   componentDidMount() {
     userService.isAdmin(user.id).then(odgovor=>{this.setState({isAdmin:odgovor.admin})})
-     
+    userService.prikazsvihSlobodnihOklada().then(odgovor=>{this.setState({oklade:odgovor})})
     userService.prikazsvihUplataZahtjeva().then(odgovor=>{this.setState({uplate:odgovor})})
+
 
 
 }
@@ -48,6 +52,13 @@ handleUplatu(id) {
     userService.odradiUplatu(id).then(res=>{console.log("odgovor na uplatu",res)})
 
 }
+izracunajOkladu(oklada) {
+ const  id=user.id
+    console.log("oklada",id)
+    
+    userService.izracunOklade(oklada,id).then(odgovor=>{console.log("respond servera:",odgovor)})
+}
+
 handleBrisanjeUplate(id) {
     
     console.log("Uplata ID:",id)
@@ -65,13 +76,46 @@ userService.spremiNovuOkladu(oklada).then(
 }
 
 render() {    
-    const {uplate,isAdmin,opisOklade,prviIshod,drugiIshod,oklada,opisPrvogIshoda,opisDrugogIshoda} = this.state
+    const {
+        uplate,
+        isAdmin,
+        opisOklade,
+        prviIshod,
+        drugiIshod,
+        oklada,
+        opisPrvogIshoda,
+        opisDrugogIshoda,
+        oklade} = this.state
 
     return (
       <div>
       <div>ADMIN</div>
 {
-    isAdmin &&  <ul>
+    isAdmin && <div>
+    <span>oklade:</span>
+
+      
+    <ul>
+                       {oklade.map((oklade, index) =>
+                       <div>
+                         <li key={oklade._id}>
+                               {oklade.opisOklade}
+
+                               <span> - {oklade.dobitniTip}
+                                    <button onClick={()=>this.izracunajOkladu(oklade)}>izračunaj</button>
+                                    
+                                    </span>
+
+                               
+                              
+                           </li>
+                           </div>
+                       )}
+                   </ul>
+    
+    
+    
+    <ul>
                         {uplate.map((uplate, index) =>
                         <div>{
                           !uplate.odradeno&& <li key={uplate._id}>
@@ -86,7 +130,8 @@ render() {
                             </li>}
                             </div>
                         )}
-                    </ul>}
+                    </ul>
+                    </div>}
       
                     <form name="form" onSubmit={this.handleSubmitOklade}> 
                     <div className='form-group'>

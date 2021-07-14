@@ -13,23 +13,30 @@ export default class Home extends React.Component {
     
 
     this.state = {
+      ulog:0,
       ukupniKef:1,
+        sviListici:[],
         novcanik: 0,
         oklade:[],
-        listic:[{
-          tip:1,
-          opisGeneralni:"",
-          opisTipa:""
-        }]
+        listic:[]
     };
+    this.promjenaUloga = this.promjenaUloga.bind(this);
     this.handleOklada = this.handleOklada.bind(this);
     this.brisiListic = this.brisiListic.bind(this);
 }
 
+promjenaUloga(e){
+  const { name, value } = e.target;
+  this.setState({ [name]: value });
+}
+
   componentDidMount() {
     userService.getAccInfo(user.id).then(odgovor=>{
-
-      this.setState({novcanik:odgovor.novcanik})
+      console.log("parovi",odgovor.listici)
+      this.setState({
+        novcanik:odgovor.novcanik,
+        sviListici:odgovor.listici
+      })
     })
 
     userService.prikazsvihSlobodnihOklada().then(odgovor=>{this.setState({oklade:odgovor})})
@@ -42,10 +49,15 @@ export default class Home extends React.Component {
 brisiListic(e){
   console.log("šta bi",this.state.listic)
   this.setState({
-    listic:[{
-    
-    }]
+    listic:[],
+    ukupniKef:1
   })
+}
+igrajListic(){
+  const {listic,ulog}=this.state
+  console.log("igranje",listic,ulog)
+ userService.igrajListic(ulog,listic,user.id).then(res=>{console.log(res)})
+  
 }
 
 handleOklada(tip1,opisGeneralni1,opisTipa1){
@@ -58,22 +70,27 @@ handleOklada(tip1,opisGeneralni1,opisTipa1){
    }
  this.setState({
    listic:[...this.state.listic,novipar],
-   ukupniKef:this.state.ukupniKef*tip1
+   ukupniKef:this.state.ukupniKef*100/tip1
  })
 
 }
 
   render() {    
-    const {oklade,listic,ukupniKef}=this.state
+    const {oklade,listic,ukupniKef,sviListici,ulog}=this.state
     return (
       <div>
         <div>
-      <div>Korisnik</div>
-      <div>{user.username}</div>
+      <div>Korisnik:{user.username}</div>
       <div>kuna:{this.state.novcanik}</div>
       <button onClick={()=>{this.dodajKune(50)}}>dodaj 50 Kuna</button>
       </div>
-      <span>oklade:</span>
+      <span>listići:</span>
+{sviListici.map((listici,index)=><div>
+          {listici.parovi.map((parovi,index)=>
+          <span>  opis:{parovi.opisGeneralni}  TIP:{parovi.odigraniTip} </span>)
+           } ulog: {listici.ulog} </div>  
+)}
+      <div>oklade:</div>
 
       
      <ul>
@@ -96,14 +113,16 @@ handleOklada(tip1,opisGeneralni1,opisTipa1){
                     {listic.map((parovi,index)=><div>
                       <li key={parovi.opisGeneralni}>
                       naziv oklade:    {parovi.opisGeneralni}
-                       koef:{parovi.tip}
+                       koef:{(100/parovi.tip).toFixed(2)}
                        opis oklade:{parovi.opisTipa}
 
                       </li>
               
                     </div>)}
-                    <span>koef:{ukupniKef}</span>
+                    <span>koef:{ukupniKef.toFixed(2)}</span>
                     <button onClick={()=>this.brisiListic()}>obrisi listić</button>
+                    <input type="number" className="form-control" name="ulog" value={ulog} onChange={this.promjenaUloga} />
+                    <button onClick={()=>this.igrajListic()}>odigraj listić</button>
 
       </div>
     );
