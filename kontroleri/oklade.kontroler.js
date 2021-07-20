@@ -82,12 +82,12 @@ exports.upisListica = (req, res) => {
 
             if(kladitelj.novcanik<ulog){res.status(202).send({poruka:"nedovoljno sredstva"})}
             else{
-             kladitelj.listici={
+             kladitelj.listici.push({
           parovi:parovi,
          ulog:ulog,
          koef:koef,
          dobitni:false
-    }
+    })
     kladitelj.novcanik-=ulog
     kladitelj.save()
     res.send({ poruka: "uspješno uplaćeno" })}
