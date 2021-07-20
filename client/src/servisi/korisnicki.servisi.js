@@ -15,20 +15,20 @@ export const userService = {
     igrajListic
    
 };
-function igrajListic(ulog,listic,id){
+function igrajListic(ulog,parovi,koef,id){
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ulog,listic,id})
+        body: JSON.stringify({ulog,parovi,koef,id})
     };
     return fetch("/api/igrajListic", requestOptions).then(handleResponse);
 }
 
-function izracunOklade(oklada,id){
+function izracunOklade(oklada){
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({oklada,id})
+        body: JSON.stringify(oklada)
     };
    
     return fetch("/api/izracunajOkladu", requestOptions).then(handleResponse);
@@ -41,7 +41,7 @@ function spremiNovuOkladu(oklada) {
         body: JSON.stringify(oklada)
     };
         console.log(oklada)
-    return fetch("/api/dodajOkladu", requestOptions).then(odgovor=>{console.log(odgovor)});
+    return fetch("/api/dodajOkladu", requestOptions).then(handleResponse);
    
 
 };

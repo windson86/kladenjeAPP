@@ -8,7 +8,7 @@ const app= express();
 const PORT = process.env.PORT || 8080;
 
 
-mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://admin:drazen81413117@oblak.qnbmf.mongodb.net/gradevina?retryWrites=true&w=majority`,{
+mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://admin:admin@oblak.qnbmf.mongodb.net/gradevina?retryWrites=true&w=majority`,{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });

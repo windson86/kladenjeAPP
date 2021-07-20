@@ -13,19 +13,18 @@ export default class AdminBoard extends React.Component {
         oklade:[],
         oklada: {
           opisOklade: '',
-          opisPrvogIshoda:"",
-          prviIshod:0.5,
-          opisDrugogIshoda:"",
-          drugiIshod:0.5,
-          dobitniTip:""
+         sanse:[],
+         tipovi:[],
       },
-
+       brojIshoda:2,
         uplate:[],
         isAdmin:false,
       
       };
       this.handleChange = this.handleChange.bind(this);
-      this.handleSubmitOklade = this.handleSubmitOklade.bind(this);
+      this.izmjeniSanse=this.izmjeniSanse.bind(this);
+      this.handleSpremanjeOklade = this.handleSpremanjeOklade.bind(this);
+      this.izmjeniTipove=this.izmjeniTipove.bind(this);
   }
   componentDidMount() {
     userService.isAdmin(user.id).then(odgovor=>{this.setState({isAdmin:odgovor.admin})})
@@ -45,47 +44,94 @@ handleChange(e) {
             }
         });
 }
+izmjeniSanse(e){
+    const { name, value } = e.target;
+    const { oklada } = this.state;
+
+   
+    let sanse=[...this.state.oklada.sanse];
+    let sansa={...sanse[name]}
+    sansa=parseInt(value)
+    sanse[name]=sansa
+    this.setState({oklada:{
+        ...oklada,
+        sanse:sanse
+    }})
+
+}
+izmjeniTipove(e){
+    const { name, value } = e.target;
+    const { oklada } = this.state;
+
+    
+    let tipovi=[...this.state.oklada.tipovi];
+    let tip={...tipovi[name]}
+    tip=value
+    tipovi[name]=tip
+    this.setState({oklada:{
+        ...oklada,
+        tipovi:tipovi
+    }})
+
+}
 
 handleUplatu(id) {
    
-    console.log("Uplata ID:",id)
+   
     userService.odradiUplatu(id).then(res=>{console.log("odgovor na uplatu",res)})
 
 }
 izracunajOkladu(oklada) {
- const  id=user.id
-    console.log("oklada",id)
-    
-    userService.izracunOklade(oklada,id).then(odgovor=>{console.log("respond servera:",odgovor)})
+ userService.izracunOklade(oklada).then(odgovor=>{console.log("respond servera:",odgovor)})
 }
 
 handleBrisanjeUplate(id) {
     
-    console.log("Uplata ID:",id)
+    
 
 }
 
-handleSubmitOklade(e){
-e.preventDefault();
+handleSpremanjeOklade(){
+
 const {oklada}=this.state
-console.log(oklada)
-userService.spremiNovuOkladu(oklada).then(
-  odgovor=>{console.log(odgovor)}
-)
+
+userService.spremiNovuOkladu(oklada).then(res=>{console.log(res)})
 
 }
+izmjeniBrojIshoda(name){
+
+if(name==="minus"){this.setState({brojIshoda:this.state.brojIshoda-1})}
+if(name==="plus"){this.setState({brojIshoda:this.state.brojIshoda+1})}
+}
+
+rendirajMultiOklade(){
+    const povratak=[];
+    const {oklada} = this.state;
+    for (let index = 0; index < this.state.brojIshoda; index++) {
+       
+    povratak.push( <div>
+       <div> <input type="number" className="form-control" name={index} value={oklada.sanse[index]} onChange={this.izmjeniSanse} />
+        <label>šansa za tip {index+1}</label>
+        </div>
+        <input type="text" className="form-control" name={index} value={oklada.tipovi[index]} onChange={this.izmjeniTipove} />
+        <label>opis tipa {index+1}</label>
+        </div>
+
+        
+        )}
+  return povratak
+}
+
 
 render() {    
+    
     const {
         uplate,
         isAdmin,
-        opisOklade,
-        prviIshod,
-        drugiIshod,
         oklada,
-        opisPrvogIshoda,
-        opisDrugogIshoda,
-        oklade} = this.state
+        oklade,
+       
+    } = this.state
 
     return (
       <div>
@@ -96,85 +142,47 @@ render() {
 
       
     <ul>
-                       {oklade.map((oklade, index) =>
-                       <div>
-                         <li key={oklade._id}>
-                               {oklade.opisOklade}
-
-                               <span> - {oklade.dobitniTip}
-                                    <button onClick={()=>this.izracunajOkladu(oklade)}>izračunaj</button>
-                                    
-                                    </span>
-
-                               
-                              
-                           </li>
-                           </div>
-                       )}
-                   </ul>
-    
-    
-    
+    {oklade.map((oklade, index) =>
+            <div>
+         <li key={oklade._id}>
+        {oklade.opisOklade}
+     <span> - {oklade.dobitniTip}
+     randomirano: {oklade.tipovi[oklade.dobitniIndex]}
+                <button onClick={()=>this.izracunajOkladu(oklade)}>izračunaj</button>
+     </span>
+        </li>
+             </div>
+            )}
+    </ul>
     <ul>
-                        {uplate.map((uplate, index) =>
-                        <div>{
-                          !uplate.odradeno&& <li key={uplate._id}>
-                                {uplate.username + ' ' + uplate.kolicina+'kn'}
-                                <span> - <button onClick={()=>this.handleUplatu(uplate._id)}>Uplati</button>
-                                     <button onClick={()=>this.handleBrisanjeUplate(uplate._id)}>Obrisi</button>
-                                     
-                                     </span>
-
-                                
-                               
-                            </li>}
-                            </div>
-                        )}
-                    </ul>
-                    </div>}
-      
-                    <form name="form" onSubmit={this.handleSubmitOklade}> 
-                    <div className='form-group'>
-                        <label htmlFor="opisOklade">opis</label>
+    {uplate.map((uplate, index) =>
+         <div>{
+            !uplate.odradeno&& 
+            <li key={uplate._id}>
+                {uplate.username + ' ' + uplate.kolicina+'kn'}
+                <span> - <button onClick={()=>this.handleUplatu(uplate._id)}>Uplati</button>
+                        <button onClick={()=>this.handleBrisanjeUplate(uplate._id)}>Obrisi</button>
+                </span>
+            </li>}
+        </div>
+        )}
+    </ul>
+ </div>}
+      Upis nove oklade:
+                   
+                    <div className='group'>
+                        <label htmlFor="opisOklade">opis oklade</label>
                         <input type="text" className="form-control" name="opisOklade" value={oklada.opisOklade} onChange={this.handleChange} />
-                        {!opisOklade &&
-                            <div className="help-block">OPIS is required</div>
-                        }
+                        
                     </div>
-                    <div className='form-group'>
-                        <label htmlFor="prviIshod">ishod1</label>
-                        <input type="number" className="form-control" name="prviIshod" value={oklada.prviIshod} onChange={this.handleChange} />
-                        {!prviIshod &&
-                            <div className="help-block">postotak potreban</div>
-                        }
-                    </div> 
-                    <div className='form-group'>
-                        <label htmlFor="opisPrvogIshoda">opis ishoda 1</label>
-                        <input type="text" className="form-control" name="opisPrvogIshoda" value={oklada.opisPrvogIshoda} onChange={this.handleChange} />
-                        {!opisPrvogIshoda &&
-                            <div className="help-block">Opis ishoda is required</div>
-                        }
-                    </div>
-                    <div className='form-group'>
-                        <label htmlFor="drugiIshod">ishod2</label>
-                        <input type="number" className="form-control" name="drugiIshod" value={oklada.drugiIshod} onChange={this.handleChange} />
-                        {!drugiIshod &&
-                            <div className="help-block">postotak potreban</div>
-                        }
-                    </div> 
-                    <div className='form-group'>
-                        <label htmlFor="opisDrugodIshoda">opis ishoda 2</label>
-                        <input type="text" className="form-control" name="opisDrugogIshoda" value={oklada.opisDrugogIshoda} onChange={this.handleChange} />
-                        {!opisDrugogIshoda &&
-                            <div className="help-block">Opis ishoda is required</div>
-                        }
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-primary">spremi Okladu</button>
+                   {this.state.brojIshoda<4 && <button name="plus" onClick={()=>this.izmjeniBrojIshoda("plus")}>+</button>}<span>broj ishoda:{this.state.brojIshoda}</span>{this.state.brojIshoda>1&&<button name="minus" onClick={()=>this.izmjeniBrojIshoda("minus")}>-</button>}
+                    {this.rendirajMultiOklade()}
+                    <div className="group">
+                        <button onClick={()=>this.handleSpremanjeOklade()} className="btn btn-primary">spremi Okladu</button>
                        
                         
                     </div>
-                    </form>                   
+                           
     
       </div>
     );

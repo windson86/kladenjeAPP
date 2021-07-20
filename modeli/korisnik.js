@@ -2,12 +2,18 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema;
 const paroviSchema = new Schema({
-    opisGeneralni:String,
-    odigraniTip:String,
-    pogoden:Boolean
+    opisOklade:String,
+    IdOklade:String,
+    odigraniIndex:Number,
+    dobitniIndex:Number,
+    pogoden:{
+        type: Boolean,
+        default: false
+    }
 })
 const listicSchema = new Schema({
     parovi:[paroviSchema],
+    koef:Number,
     ulog:Number,
     dobitni:Boolean
 

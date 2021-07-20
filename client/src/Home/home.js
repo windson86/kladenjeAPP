@@ -1,5 +1,8 @@
 import React from 'react';
 import { userService } from '../servisi/korisnicki.servisi';
+import Button from 'react-bootstrap/Button';
+import { Col, Container, Row ,Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+
 let user = JSON.parse(localStorage.getItem('user')) || [];
 
 
@@ -14,14 +17,16 @@ export default class Home extends React.Component {
 
     this.state = {
       ulog:0,
+      porez:0.2,
       ukupniKef:1,
         sviListici:[],
         novcanik: 0,
         oklade:[],
-        listic:[]
+        listic:[],
+        parovi:[]
     };
     this.promjenaUloga = this.promjenaUloga.bind(this);
-    this.handleOklada = this.handleOklada.bind(this);
+    //this.handleOklada = this.handleOklada.bind(this);
     this.brisiListic = this.brisiListic.bind(this);
 }
 
@@ -32,8 +37,7 @@ promjenaUloga(e){
 
   componentDidMount() {
     userService.getAccInfo(user.id).then(odgovor=>{
-      console.log("parovi",odgovor.listici)
-      this.setState({
+     this.setState({
         novcanik:odgovor.novcanik,
         sviListici:odgovor.listici
       })
@@ -47,84 +51,127 @@ promjenaUloga(e){
   }
 
 brisiListic(e){
-  console.log("šta bi",this.state.listic)
+  
   this.setState({
-    listic:[],
+    parovi:[],
     ukupniKef:1
   })
 }
 igrajListic(){
-  const {listic,ulog}=this.state
-  console.log("igranje",listic,ulog)
- userService.igrajListic(ulog,listic,user.id).then(res=>{console.log(res)})
+  const {parovi,ulog,ukupniKef}=this.state
+  console.log("igranje",parovi,ulog)
+ userService.igrajListic(ulog,parovi,ukupniKef,user.id).then(res=>{console.log(res)})
   
 }
 
-handleOklada(tip1,opisGeneralni1,opisTipa1){
- 
+dodajParNaListic(oklade,i){
+const {parovi}=this.state
+var postoji=false;
 
-  const novipar={
-        tip:tip1,
-        opisGeneralni:opisGeneralni1,
-        opisTipa:opisTipa1
-   }
- this.setState({
-   listic:[...this.state.listic,novipar],
-   ukupniKef:this.state.ukupniKef*100/tip1
- })
+for (let index = 0; index < parovi.length; index++) {
+        if(parovi[index].opisOklade===oklade.opisOklade)
+    {postoji=true;break;}
+}
+  console.log("ima?",postoji)
+
+ if(!postoji) {
+this.setState({
+ 
+  ukupniKef:this.state.ukupniKef*100/oklade.sanse[i].toFixed(2)-this.state.porez
+})
+
+this.setState( prevState => ({
+  parovi: [...prevState.parovi,{
+    opisOklade:oklade.opisOklade,
+    odigraniTip:oklade.tipovi[i],
+    odigraniIndex:i,
+    IdOklade:oklade._id,
+    koef:(100/oklade.sanse[i]).toFixed(2)-this.state.porez
+  }],
+  
+}),
+
+);}
+else{}
+
 
 }
 
+
+
+
+
   render() {    
-    const {oklade,listic,ukupniKef,sviListici,ulog}=this.state
+   
+    const {oklade,ukupniKef,sviListici,ulog,porez,parovi}=this.state
+  
     return (
-      <div>
+      <Container fluid="md">
+     
+     <Row>
+      
+<Col>
         <div>
       <div>Korisnik:{user.username}</div>
-      <div>kuna:{this.state.novcanik}</div>
-      <button onClick={()=>{this.dodajKune(50)}}>dodaj 50 Kuna</button>
+      <div>kuna:{this.state.novcanik.toFixed(2)}</div>
+      <Button variant="primary" onClick={()=>{this.dodajKune(50)}}>dodaj 50 Kuna</Button>
       </div>
-      <span>listići:</span>
-{sviListici.map((listici,index)=><div>
-          {listici.parovi.map((parovi,index)=>
-          <span>  opis:{parovi.opisGeneralni}  TIP:{parovi.odigraniTip} </span>)
-           } ulog: {listici.ulog} </div>  
-)}
+      </Col>
+      </Row>
+     
+     
+      <Row>
+      <Col>
       <div>oklade:</div>
 
       
-     <ul>
-                        {oklade.map((oklade, index) =>
-                        <div>
-                          <li key={oklade._id}>
-                                {oklade.opisOklade}
-                                <span> - <button onClick={()=>this.handleOklada(oklade.prviIshod,oklade.opisOklade,oklade.opisPrvogIshoda)}>{oklade.opisPrvogIshoda}{oklade.prviIshod}</button>
-                                     <button onClick={()=>this.handleOklada(oklade.drugiIshod,oklade.opisOklade,oklade.opisDrugogIshoda)}>{oklade.opisDrugogIshoda}{oklade.drugiIshod}</button>
+     <ListGroup >
+         {oklade.map((oklade, index) =>
+        <div>
+            <ListGroupItem  key={oklade._id}>
+                {oklade.opisOklade}
+                    <span> {oklade.sanse.map((sanse,index)=>
+                    <Card body >
+                    <span className="d-flex justify-content-center">koef  {((100/sanse)-porez).toFixed(2)}
+                    <button onClick={()=>this.dodajParNaListic(oklade,index)} value={index}>{oklade.tipovi[index]}</button>
+                    </span> 
+                    </Card>
+                               )}
                                      
-                                     </span>
+                    </span>
 
                                 
                                
-                            </li>
-                            </div>
-                        )}
-                    </ul>
+              </ListGroupItem>
+          </div>
+                )}
+       </ListGroup>
+       </Col>
+       <Col>
                     <span>listić:</span>
-                    {listic.map((parovi,index)=><div>
-                      <li key={parovi.opisGeneralni}>
-                      naziv oklade:    {parovi.opisGeneralni}
-                       koef:{(100/parovi.tip).toFixed(2)}
-                       opis oklade:{parovi.opisTipa}
-
-                      </li>
-              
-                    </div>)}
+                    {parovi.map((par,index)=>
+                    <div>{par.opisOklade} TIP: {par.odigraniTip} -  koef {par.koef.toFixed(2)}</div>
+                    )}
                     <span>koef:{ukupniKef.toFixed(2)}</span>
                     <button onClick={()=>this.brisiListic()}>obrisi listić</button>
                     <input type="number" className="form-control" name="ulog" value={ulog} onChange={this.promjenaUloga} />
                     <button onClick={()=>this.igrajListic()}>odigraj listić</button>
+                    </Col>
+                    
+                      </Row>
+            <Row>   
+            <Col xs={9}>
+      <span>listići:</span>
+{sviListici.map((listici,index)=><Card body >
+  broj listića: {index+1}<br />
+          {listici.parovi.map((parovi,index)=>
+          <span>  opis:{parovi.opisOklade}  TIP:{parovi.odigraniIndex} </span>)
+           } <br />ulog: {listici.ulog} dobitni:{String(listici.dobitni)} </Card>  
+)}
 
-      </div>
+</Col>
+                    </Row>
+      </Container>
     );
   }
 }

@@ -21,13 +21,13 @@ module.exports = function(app) {
 
   app.post("/api/izracunajOkladu",
   [provjeraRegistracije.provjeraAdmina],
-  kontroler.izracunajOkladu); 
+  okladeKontroler.izracunajOkladu); 
 
   app.post("/api/igrajListic", okladeKontroler.upisListica);
 
   app.post("/api/isAdmin", kontroler.isAdmin);
 
-  app.post("/api/dodajOkladu", kontroler.dodavanjeOklade);
+  app.post("/api/dodajOkladu", okladeKontroler.dodavanjeOklade);
 
   app.post("/api/odradiUplatu", kontroler.uplatiNaRacun);
 
@@ -37,7 +37,7 @@ module.exports = function(app) {
 
   app.get("/api/get/allUplate",kontroler.sveUplate);
 
-  app.get("/api/get/allOklade",kontroler.dohvatiSlobodneOklade);
+  app.get("/api/get/allOklade",okladeKontroler.dohvatiOklade);
 
   app.post("/api/login", kontroler.signin);
 };
