@@ -160,7 +160,7 @@ else{}
                     
                       </Row>
             <Row>   
-            <Col xs={9}>
+            
       <span>listići:</span>
 {sviListici.map((listici,index)=><Card body >
   broj listića: {index+1}<br />
@@ -169,7 +169,7 @@ else{}
            } <br />ulog: {listici.ulog} dobitni:{String(listici.dobitni)} </Card>  
 )}
 
-</Col>
+
                     </Row>
       </Container>
     );

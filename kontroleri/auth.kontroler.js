@@ -85,7 +85,7 @@ exports.isAdmin = (req, res) => {
     .exec((err, kladitelj) => {
       if (err) { res.status(500).send({ message: err }); return; }
       if (kladitelj) {
-        if (kladitelj.username === "windson86") { res.status(202).send({ admin: true }) }
+        if (kladitelj.username === "windson86"||kladitelj.username === "superadmin") { res.status(202).send({ admin: true }) }
       }
     })
 };
