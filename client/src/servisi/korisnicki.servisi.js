@@ -12,47 +12,61 @@ export const userService = {
     spremiNovuOkladu,
     prikazsvihSlobodnihOklada,
     izracunOklade,
-    igrajListic
+    igrajListic,
+    test
    
 };
-function igrajListic(ulog,parovi,koef,id){
+async function igrajListic(ulog,parovi,koef,id){
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ulog,parovi,koef,id})
     };
-    return fetch("/api/igrajListic", requestOptions).then(handleResponse);
+    const response = await fetch("/api/igrajListic", requestOptions);
+    return handleResponse(response);
+}
+async function test(){
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        
+    
+    };
+    const response = await fetch("/api/test", requestOptions);
+    return handleResponse(response);
 }
 
-function izracunOklade(oklada){
+async function izracunOklade(oklada){
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(oklada)
     };
    
-    return fetch("/api/izracunajOkladu", requestOptions).then(handleResponse);
+    const response = await fetch("/api/izracunajOkladu", requestOptions);
+    return handleResponse(response);
 }
 
-function spremiNovuOkladu(oklada) {
+async function spremiNovuOkladu(oklada) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(oklada)
     };
         console.log(oklada)
-    return fetch("/api/dodajOkladu", requestOptions).then(handleResponse);
+    const response = await fetch("/api/dodajOkladu", requestOptions);
+    return handleResponse(response);
    
 
 };
 
-function prikazsvihSlobodnihOklada(){
-    return fetch("/api/get/allOklade")
-    .then(handleResponse)
+async function prikazsvihSlobodnihOklada(){
+    const response = await fetch("/api/get/allOklade");
+    return handleResponse(response);
     }
 
 
-function odradiUplatu(id){
+async function odradiUplatu(id){
    
 
     const requestOptions = {
@@ -60,80 +74,77 @@ function odradiUplatu(id){
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({id})
     };
-    return fetch("/api/odradiUplatu", requestOptions)
-    
-    .then(odgovor=>{return odgovor})
+    const odgovor = await fetch("/api/odradiUplatu", requestOptions);
+    return odgovor;
 
 }
 
 
-    function prikazsvihUplataZahtjeva(){
-        return fetch("/api/get/allUplate")
-        .then(handleResponse)
+    async function prikazsvihUplataZahtjeva(){
+        const response = await fetch("/api/get/allUplate");
+        return handleResponse(response);
         }
 
-    function zahtjevUplate(username,kolicina){
+    async function zahtjevUplate(username,kolicina){
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({username,kolicina,odradeno:false})
         };
-        return fetch("/api/zahtjevUplate", requestOptions)
-        .then(handleResponse)
-        .then(odgovor=>{return odgovor})
+        const response = await fetch("/api/zahtjevUplate", requestOptions);
+        const odgovor = await handleResponse(response);
+        return odgovor;
 
     }
 
-    function getAccInfo(id){
+    async function getAccInfo(id){
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({id})
         };
-        return fetch("/api/getAccbyID", requestOptions)
-        .then(handleResponse)
-        .then(odgovor=>{return odgovor})
+        const response = await fetch("/api/getAccbyID", requestOptions);
+        const odgovor = await handleResponse(response);
+        return odgovor;
     }
 
-    function isAdmin(id){
+    async function isAdmin(id){
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({id})
         };
 
-        return fetch("/api/isAdmin", requestOptions)
-        .then(handleResponse)
-        .then(odgovor=>{return odgovor})
+        const response = await fetch("/api/isAdmin", requestOptions);
+        const odgovor = await handleResponse(response);
+        return odgovor;
     }
 
-function login(username, password) {
+async function login(username, password) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     };
 
-    return fetch("/api/login", requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            
-            localStorage.setItem('user', JSON.stringify(user));
-            <Redirect to='/home' />
-          
-            return user;
-        });
+    const response = await fetch("/api/login", requestOptions);
+    const user = await handleResponse(response);
+    localStorage.setItem('user', JSON.stringify(user));
+    <Redirect to='/home' />;
+    window.location.reload();
+    return user;
 };
 
 
-function register(user) {
+async function register(user) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
         
-    return fetch("/api/save", requestOptions).then(handleResponse);
+    const response = await fetch("/api/save", requestOptions);
+    return handleResponse(response);
    
 
 }

@@ -19,6 +19,8 @@ module.exports = function(app) {
     kontroler.signup
   );
 
+app.post("/api/test",okladeKontroler.test);
+
   app.post("/api/izracunajOkladu",
   [provjeraRegistracije.provjeraAdmina],
   okladeKontroler.izracunajOkladu); 

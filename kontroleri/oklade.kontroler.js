@@ -15,11 +15,14 @@ for (i=0;i<sanseArray.length-1;i++){
 }
 var r = Math.random();
 
-for(i=0;i<decimalArray.length && r>=decimalArray[i];i++){
- 
-  }
-  return i;
+for(  i=0;  i<decimalArray.length && r>=decimalArray[i];  i++){}
+return i;
 }
+
+exports.test=(req,res)=>{
+  res.send({test:"test"})
+}
+
 
 exports.izracunajOkladu = (req,res) =>{
   
@@ -46,6 +49,7 @@ korisnici.map((korisnik,index)=>{
                 var dobitni=[]
                 for (let index = 0; index < listic.parovi.length; index++) {
                    dobitni.push(listic.parovi[index].pogoden)}
+                   console.log(dobitni,korisnik.username)
              if(Object.values(dobitni).every(Boolean)){
            
               var a=listic.ulog;
@@ -79,7 +83,8 @@ exports.upisListica = (req, res) => {
  const koef=req.body.koef;
   const ulog = req.body.ulog;
         Kladitelj.findOne({ _id: req.body.id }, (err, kladitelj) => {
-
+            if(ulog===0){res.status(202).send({poruka:"ulog je nula"})}
+            else{
             if(kladitelj.novcanik<ulog){res.status(202).send({poruka:"nedovoljno sredstva"})}
             else{
              kladitelj.listici.push({
@@ -90,7 +95,7 @@ exports.upisListica = (req, res) => {
     })
     kladitelj.novcanik-=ulog
     kladitelj.save()
-    res.send({ poruka: "uspješno uplaćeno" })}
+    res.send({ poruka: "uspješno uplaćeno" })}}
   }) 
 }
 
@@ -103,13 +108,13 @@ exports.dohvatiOklade = (req, res) => {
 }
 
 exports.dodavanjeOklade = (req, res) => {
-  console.log(req.body)
+  
   var sum=0;
   const oklada = new Oklada(req.body)
  req.body.sanse.map((sansa,index)=>{
       sum+=sansa;
  })
-  console.log(sum)
+  
   if(sum===100){
     oklada.save()
     res.send({poruka:"oklada Spremljenja"})

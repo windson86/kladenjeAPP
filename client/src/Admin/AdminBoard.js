@@ -106,15 +106,18 @@ if(name==="plus"){this.setState({brojIshoda:this.state.brojIshoda+1})}
 
 rendirajMultiOklade(){
     const povratak=[];
-    const {oklada} = this.state;
-    for (let index = 0; index < this.state.brojIshoda; index++) {
+    const {oklada,brojIshoda} = this.state;
+    for (let index = 0; index < brojIshoda; index++) {
        
     povratak.push( <div>
-       <div> <input type="number" className="form-control" name={index} value={oklada.sanse[index]} onChange={this.izmjeniSanse} />
-        <label>šansa za tip {index+1}</label>
+       <div> 
+       <label>šansa za tip {index+1}</label>
+           <input type="number" className="form-control" name={index} value={oklada.sanse[index]} onChange={this.izmjeniSanse} />
+        
         </div>
-        <input type="text" className="form-control" name={index} value={oklada.tipovi[index]} onChange={this.izmjeniTipove} />
         <label>opis tipa {index+1}</label>
+        <input type="text" className="form-control" name={index} value={oklada.tipovi[index]} onChange={this.izmjeniTipove} />
+        
         </div>
 
         
@@ -154,7 +157,9 @@ render() {
              </div>
             )}
     </ul>
+    <button onClick={()=>userService.test()}>test</button>
     <ul>
+
     {uplate.map((uplate, index) =>
          <div>{
             !uplate.odradeno&& 
