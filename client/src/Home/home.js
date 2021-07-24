@@ -67,12 +67,12 @@ igrajListic(){
 dodajParNaListic(oklade,i){
 const {parovi}=this.state
 var postoji=false;
-
+var jindex = 0;
 for (let index = 0; index < parovi.length; index++) {
         if(parovi[index].opisOklade===oklade.opisOklade)
-    {postoji=true;break;}
+    {postoji=true;jindex=index;break;}
 }
-  console.log("ima?",postoji)
+  
 
  if(!postoji) {
 this.setState({
@@ -92,7 +92,23 @@ this.setState( prevState => ({
 }),
 
 );}
-else{}
+else{
+  let noviparovi = [...this.state.parovi];
+  let par = {...noviparovi[jindex]};
+ 
+  par.opisOklade=oklade.opisOklade
+  par.odigraniTip=oklade.tipovi[i]
+  par.odigraniIndex=i
+  par.IdOklade=oklade._id
+  par.koef=(100/oklade.sanse[i]).toFixed(2)-this.state.porez
+
+  noviparovi[jindex]=par
+
+  this.setState({
+    parovi:noviparovi,
+    ukupniKef:(this.state.ukupniKef-parovi.[jindex].koef)*100/oklade.sanse[i].toFixed(2)
+  })
+}
 
 
 }

@@ -78,7 +78,7 @@ izmjeniTipove(e){
 handleUplatu(id) {
    
    
-    userService.odradiUplatu(id).then(res=>{console.log("odgovor na uplatu",res)})
+    userService.odradiUplatu(id).then(res=>{console.log(res)})
 
 }
 izracunajOkladu(oklada) {
@@ -95,7 +95,7 @@ handleSpremanjeOklade(){
 
 const {oklada}=this.state
 
-userService.spremiNovuOkladu(oklada).then(res=>{console.log(res)})
+userService.spremiNovuOkladu(oklada).then(res=>{alert(res.poruka)})
 
 }
 izmjeniBrojIshoda(name){
@@ -125,6 +125,9 @@ rendirajMultiOklade(){
   return povratak
 }
 
+test(){
+    userService.test().then(res=>alert(res.poruka))
+}
 
 render() {    
     
@@ -157,7 +160,7 @@ render() {
              </div>
             )}
     </ul>
-    <button onClick={()=>userService.test()}>test</button>
+    <button onClick={()=>this.test()}>test</button>
     <ul>
 
     {uplate.map((uplate, index) =>

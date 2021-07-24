@@ -15,7 +15,14 @@ const listicSchema = new Schema({
     parovi:[paroviSchema],
     koef:Number,
     ulog:Number,
-    dobitni:Boolean
+    isplacen:{
+        type: Boolean,
+        default: false
+    },
+    dobitni:{
+        type: Boolean,
+        default: false
+    },
 
 })
 const KorisnikSchema = new Schema({

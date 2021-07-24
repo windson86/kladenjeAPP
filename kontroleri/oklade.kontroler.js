@@ -1,6 +1,6 @@
 const Kladitelj = require("../modeli/korisnik")
-const ZahtjevUplate = require("../modeli/zahtjeviZaUplatu")
-const OkladaDvaTip = require("../modeli/2tip.oklade")
+//const ZahtjevUplate = require("../modeli/zahtjeviZaUplatu")
+//const OkladaDvaTip = require("../modeli/2tip.oklade")
 const Oklada = require("../modeli/generalneOklade")
 
 
@@ -20,7 +20,27 @@ return i;
 }
 
 exports.test=(req,res)=>{
-  res.send({test:"test"})
+      //treba provjeriti sve neisplacene listice
+    var  dobitak=[]
+Kladitelj.find({"listici.isplacen":false},(err,korisnik)=>{
+  korisnik.map((korisnik)=>{
+korisnik.listici.map((listic)=>{
+ if(listic.isplacen===false) {console.log(listic.dobitni,korisnik.username,korisnik.novcanik,listic.ulog,listic.koef);
+  var a=listic.ulog;
+  var b=listic.koef;
+  var dobitak=a*b
+  korisnik.novcanik += Math.round( dobitak * 1e2 ) / 1e2
+  listic.isplacen=true
+  
+}
+})
+korisnik.save()
+  })
+  
+  
+  })
+
+
 }
 
 
@@ -55,8 +75,8 @@ korisnici.map((korisnik,index)=>{
               var a=listic.ulog;
               var b=listic.koef;
               var dobitak=a*b
-              
-              korisnik.novcanik += Math.round( dobitak * 1e2 ) / 1e2
+              if(!listic.isplacen){korisnik.novcanik += Math.round( dobitak * 1e2 ) / 1e2}
+              listic.isplacen=true;
                listic.dobitni=true;
               console.log("dobitni")
               }
