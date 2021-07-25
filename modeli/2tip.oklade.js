@@ -7,6 +7,8 @@ const dvaTipOkladeSchema = new Schema({
     prviIshod:Number,
     opisDrugogIshoda:String,
     drugiIshod:Number,
+    dobitniTip:String,
+    dobitniOmjer:Number,
     datumPostavljanja: Date,
     datumIsteka: Date,
     

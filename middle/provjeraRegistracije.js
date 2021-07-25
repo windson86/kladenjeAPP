@@ -1,6 +1,11 @@
 const Kladitelj = require("../modeli/korisnik") 
 
 
+provjeraAdmina = (req,res,next) =>{
+ 
+  next();
+}
+
 provjeriDupliUsernameEmail = (req, res, next) => {
     // Username
     Kladitelj.findOne({
@@ -36,8 +41,8 @@ provjeriDupliUsernameEmail = (req, res, next) => {
   };
 
   const provjeraRegistracije = {
-    provjeriDupliUsernameEmail
-   
+    provjeriDupliUsernameEmail,
+   provjeraAdmina
   };
   
   module.exports = provjeraRegistracije;

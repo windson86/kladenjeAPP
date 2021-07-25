@@ -8,7 +8,7 @@ const app= express();
 const PORT = process.env.PORT || 8080;
 
 
-mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://admin:drazen81413117@oblak.qnbmf.mongodb.net/gradevina?retryWrites=true&w=majority`,{
+mongoose.connect(process.env.MONGODB_URI || `mongodb+srv://admin:admin@oblak.qnbmf.mongodb.net/gradevina?retryWrites=true&w=majority`,{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -31,7 +31,9 @@ require("./rute/api")(app);
 
 if(process.env.NODE_ENV==='production'){
     app.use(express.static('client/build'));
-
+    app.get('*', (req,res) =>{
+        res.sendFile(path.join(__dirname+'/client/build/index.html'));
+    });
 }
-
+   
 app.listen(PORT, console.log(`Server je pokrenut na portu: ${PORT}.`));
