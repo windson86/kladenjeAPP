@@ -93,21 +93,21 @@ this.setState( prevState => ({
 
 );}
 else{
-  let noviparovi = [...this.state.parovi];
-  let par = {...noviparovi[jindex]};
+  // let noviparovi = [...this.state.parovi];
+  // let par = {...noviparovi[jindex]};
  
-  par.opisOklade=oklade.opisOklade
-  par.odigraniTip=oklade.tipovi[i]
-  par.odigraniIndex=i
-  par.IdOklade=oklade._id
-  par.koef=(100/oklade.sanse[i]).toFixed(2)-this.state.porez
+  // par.opisOklade=oklade.opisOklade
+  // par.odigraniTip=oklade.tipovi[i]
+  // par.odigraniIndex=i
+  // par.IdOklade=oklade._id
+  // par.koef=(100/oklade.sanse[i]).toFixed(2)-this.state.porez
 
-  noviparovi[jindex]=par
+  // noviparovi[jindex]=par
 
-  this.setState({
-    parovi:noviparovi,
-    ukupniKef:(this.state.ukupniKef-parovi.[jindex].koef)*100/oklade.sanse[i].toFixed(2)
-  })
+  // this.setState({
+  //   parovi:noviparovi,
+  //   ukupniKef:(this.state.ukupniKef-parovi.[jindex].koef)*100/oklade.sanse[i].toFixed(2)
+  // })
 }
 
 
