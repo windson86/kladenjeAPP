@@ -16,6 +16,7 @@ export default class Home extends React.Component {
     
 
     this.state = {
+      isUser:false,
       ulog:0,
       porez:0.2,
       ukupniKef:1,
@@ -39,6 +40,7 @@ promjenaUloga(e){
     if(user){
     userService.getAccInfo(user.id).then(odgovor=>{
      this.setState({
+       isUser:true,
         novcanik:odgovor.novcanik,
         sviListici:odgovor.listici
       })
@@ -121,7 +123,7 @@ else{
 
   render() {    
    
-    const {oklade,ukupniKef,sviListici,ulog,porez,parovi}=this.state
+    const {oklade,ukupniKef,sviListici,ulog,porez,parovi,isUser}=this.state
     
     return (
       <Container fluid="md">
@@ -132,7 +134,7 @@ else{
         <div>
       <div>Korisnik:{user.username}</div>
       <div>kuna:{this.state.novcanik.toFixed(2)}</div>
-      <Button variant="primary" onClick={()=>{this.dodajKune(50)}}>dodaj 50 Kuna</Button>
+      {isUser&&<Button variant="primary" onClick={()=>{this.dodajKune(50)}}>dodaj 50 Kuna</Button>}
       </div>
       </Col>
       </Row>
