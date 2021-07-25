@@ -175,7 +175,7 @@ else{
                     <span>koef:{ukupniKef.toFixed(2)}</span>
                     <button onClick={()=>this.brisiListic()}>obrisi listić</button>
                     <input type="number" className="form-control" name="ulog" value={ulog} onChange={this.promjenaUloga} />
-                    <button onClick={()=>this.igrajListic()}>odigraj listić</button>
+                   {isUser&&<button onClick={()=>this.igrajListic()}>odigraj listić</button>} 
                     </Col>
                     
                       </Row>
