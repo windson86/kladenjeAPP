@@ -36,6 +36,7 @@ promjenaUloga(e){
 }
 
   componentDidMount() {
+    if(user){
     userService.getAccInfo(user.id).then(odgovor=>{
      this.setState({
         novcanik:odgovor.novcanik,
@@ -44,11 +45,12 @@ promjenaUloga(e){
     })
 
     userService.prikazsvihSlobodnihOklada().then(odgovor=>{this.setState({oklade:odgovor})})
-    
+  }
   }
   dodajKune(iznos){
+    if(user){
     userService.zahtjevUplate(user.username,iznos)
-  }
+  }}
 
 brisiListic(e){
   
@@ -120,7 +122,7 @@ else{
   render() {    
    
     const {oklade,ukupniKef,sviListici,ulog,porez,parovi}=this.state
-  
+    
     return (
       <Container fluid="md">
      
