@@ -3,12 +3,14 @@ const Kladitelj = require("../modeli/korisnik");
 provjeraAdmina = (req, res, next) => {
   const user = req.body.user;
 
-  if ((user.username = "windson86")) {
+  if (user.username === "windson86") {
     next();
   } else {
     return res.status(202).send({ poruka: "not admin" });
   }
 };
+
+provjeraTokena = (req, res, next) => {};
 
 provjeriDupliUsernameEmail = (req, res, next) => {
   // Username

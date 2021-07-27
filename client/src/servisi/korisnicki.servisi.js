@@ -1,4 +1,7 @@
+import { authHeader } from "../helperi/authHeader";
+
 import { Redirect } from "react-router-dom";
+
 export const userService = {
   register,
   logout,
@@ -13,11 +16,22 @@ export const userService = {
   izracunOklade,
   igrajListic,
   test,
+  obrisiListic,
 };
+
+async function obrisiListic(IdUser, IdListic) {
+  const requestOptions = {
+    method: "POST",
+    headers: authHeader(),
+    body: JSON.stringify({ IdUser, IdListic }),
+  };
+  const response = await fetch("/api/obrisiListic", requestOptions);
+  return handleResponse(response);
+}
 async function igrajListic(ulog, parovi, koef, id) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ ulog, parovi, koef, id }),
   };
   const response = await fetch("/api/igrajListic", requestOptions);
@@ -27,7 +41,7 @@ async function test(nesto) {
   console.log(nesto);
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ nesto }),
   };
   const response = await fetch("/api/test", requestOptions);
@@ -37,7 +51,7 @@ async function test(nesto) {
 async function izracunOklade(oklada, user) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ oklada, user }),
   };
 
@@ -48,7 +62,7 @@ async function izracunOklade(oklada, user) {
 async function spremiNovuOkladu(oklada) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify(oklada),
   };
   console.log(oklada);
@@ -64,7 +78,7 @@ async function prikazsvihSlobodnihOklada() {
 async function odradiUplatu(id) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ id }),
   };
   const odgovor = await fetch("/api/odradiUplatu", requestOptions);
@@ -79,7 +93,7 @@ async function prikazsvihUplataZahtjeva() {
 async function zahtjevUplate(username, kolicina) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ username, kolicina, odradeno: false }),
   };
   const response = await fetch("/api/zahtjevUplate", requestOptions);
@@ -90,7 +104,7 @@ async function zahtjevUplate(username, kolicina) {
 async function getAccInfo(id) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ id }),
   };
   const response = await fetch("/api/getAccbyID", requestOptions);
@@ -101,7 +115,7 @@ async function getAccInfo(id) {
 async function isAdmin(id) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeader(),
     body: JSON.stringify({ id }),
   };
 

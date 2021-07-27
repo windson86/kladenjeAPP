@@ -36,16 +36,18 @@ export default class Home extends React.Component {
     this.promjenaUloga = this.promjenaUloga.bind(this);
     this.makniPar = this.makniPar.bind(this);
     this.brisiListic = this.brisiListic.bind(this);
+    this.deleteListicFromDatabase = this.deleteListicFromDatabase.bind(this);
   }
 
   makniPar(e) {
-    console.log(e.target.value);
     const { value } = e.target;
     const { parovi } = this.state;
 
     if (value > -1) {
+      parovi.splice(value, 1);
+      console.log(parovi);
       this.setState({
-        parovi: parovi.splice(value, 1),
+        parovi: parovi,
       });
     }
   }
@@ -56,24 +58,20 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    if (user) {
-      userService.getAccInfo(user.id).then((odgovor) => {
-        this.setState({
-          isUser: true,
-          novcanik: odgovor.novcanik,
-          sviListici: odgovor.listici,
-        });
+    userService.getAccInfo(user.id).then((odgovor) => {
+      this.setState({
+        isUser: true,
+        novcanik: odgovor.novcanik,
+        sviListici: odgovor.listici,
       });
+    });
 
-      userService.prikazsvihSlobodnihOklada().then((odgovor) => {
-        this.setState({ oklade: odgovor });
-      });
-    }
+    userService.prikazsvihSlobodnihOklada().then((odgovor) => {
+      this.setState({ oklade: odgovor });
+    });
   }
   dodajKune(iznos) {
-    if (user) {
-      userService.zahtjevUplate(user.username, iznos);
-    }
+    userService.zahtjevUplate(user.username, iznos);
   }
 
   brisiListic(e) {
@@ -86,11 +84,10 @@ export default class Home extends React.Component {
   }
   igrajListic() {
     const { parovi, ulog } = this.state;
-    console.log("igranje", parovi, ulog, this.calculateKoef(parovi));
+
     userService
       .igrajListic(ulog, parovi, this.calculateKoef(parovi), user.id)
       .then((res) => {
-        console.log(res);
         this.setState({
           alertText: res.poruka,
           alertOn: true,
@@ -101,7 +98,7 @@ export default class Home extends React.Component {
       });
   }
 
-  AlertDismissible() {
+  AlertSuccessDismissible() {
     const { alertOn, alertText } = this.state;
 
     if (alertOn) {
@@ -158,10 +155,14 @@ export default class Home extends React.Component {
       });
     }
   }
+  deleteListicFromDatabase(e) {
+    console.log("target", e.target.value);
+    userService.obrisiListic(user.id, e.target.value);
+  }
 
   calculateKoef(parovi) {
     let koef = 1;
-    parovi.map((par) => {
+    parovi.forEach((par) => {
       koef *= par.koef;
     });
 
@@ -173,12 +174,12 @@ export default class Home extends React.Component {
 
     return (
       <Container fluid="md" className="bg-secondary">
-        {this.AlertDismissible()}
+        {this.AlertSuccessDismissible()}
         <Row>
           <Col>
             <div className="text-white">
-              <div>Korisnik:{user.username}</div>
-              <div>kuna:{this.state.novcanik.toFixed(2)}</div>
+              <div>{user.username}</div>
+              <div>{this.state.novcanik.toFixed(2)} Kn</div>
               {isUser && (
                 <Button
                   variant="primary"
@@ -200,7 +201,7 @@ export default class Home extends React.Component {
             <ListGroup className="bg-secondary">
               {oklade.map((oklade, index) => (
                 <div>
-                  <ListGroupItem className="bg-info" key={oklade._id}>
+                  <ListGroupItem className="bg-info" key={oklade.id}>
                     {oklade.opisOklade}
                     <span>
                       {" "}
@@ -234,7 +235,7 @@ export default class Home extends React.Component {
                 <div className="text-white">
                   {par.opisOklade} TIP: {par.odigraniTip} - koef{" "}
                   {par.koef.toFixed(2)}
-                  <Button value={index} onClick={() => this.makniPar}>
+                  <Button value={index} onClick={this.makniPar}>
                     X
                   </Button>
                 </div>
@@ -245,7 +246,7 @@ export default class Home extends React.Component {
               <Button onClick={() => this.brisiListic()}>obrisi listić</Button>
               <input
                 type="number"
-                className="form-control bg-secondary"
+                className="text-white form-control bg-secondary"
                 name="ulog"
                 value={ulog}
                 onChange={this.promjenaUloga}
@@ -261,13 +262,19 @@ export default class Home extends React.Component {
         <Row>
           <span className="text-white">listići:</span>
           {sviListici.map((listici, index) => (
-            <Card body>
-              broj listića: {index + 1} <Button>x</Button>
+            <Card body className="text-white bg-secondary">
+              <Button
+                value={listici._id}
+                onClick={this.deleteListicFromDatabase}
+              >
+                x
+              </Button>
               <br />
               {listici.parovi.map((parovi, index) => (
                 <span>
                   {" "}
-                  opis:{parovi.opisOklade} TIP:{parovi.odigraniIndex}{" "}
+                  {parovi.opisOklade}
+                  TIP:{parovi.odigraniTip} <br />
                 </span>
               ))}{" "}
               <br />

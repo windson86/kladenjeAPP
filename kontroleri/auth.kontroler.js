@@ -78,7 +78,7 @@ exports.isAdmin = (req, res) => {
 };
 
 exports.GetAccByID = (req, res) => {
-  Kladitelj.findOne({ _id: req.body.id }).exec((err, kladitelj) => {
+  Kladitelj.findOne({ _id: req.userId }).exec((err, kladitelj) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -94,6 +94,7 @@ exports.GetAccByID = (req, res) => {
 };
 
 exports.signin = (req, res) => {
+  console.log(req.body.username);
   Kladitelj.findOne({ username: req.body.username }).exec((err, kladitelj) => {
     if (err) {
       res.status(500).send({ message: err });
