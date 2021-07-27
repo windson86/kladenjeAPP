@@ -3,5 +3,5 @@ const provjeraRegistracije = require("./provjeraRegistracije");
 
 module.exports = {
   authJwt,
-  provjeraRegistracije
+  provjeraRegistracije,
 };

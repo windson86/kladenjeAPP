@@ -2,7 +2,8 @@ const Kladitelj = require("../modeli/korisnik")
 //const ZahtjevUplate = require("../modeli/zahtjeviZaUplatu")
 //const OkladaDvaTip = require("../modeli/2tip.oklade")
 const Oklada = require("../modeli/generalneOklade")
-
+const jwt = require("jsonwebtoken");
+const config = require("../config/auth.config.js");
 
 function izracunOklade(sanseArray){
 
@@ -19,37 +20,20 @@ for(  i=0;  i<decimalArray.length && r>=decimalArray[i];  i++){}
 return i;
 }
 
+
+
 exports.test=(req,res)=>{
-      //treba provjeriti sve neisplacene listice
-    var  dobitak=[]
-Kladitelj.find({"listici.isplacen":false},(err,korisnik)=>{
-  korisnik.map((korisnik)=>{
-korisnik.listici.map((listic)=>{
- if(listic.isplacen===false) {console.log(listic.dobitni,korisnik.username,korisnik.novcanik,listic.ulog,listic.koef);
-  var a=listic.ulog;
-  var b=listic.koef;
-  var dobitak=a*b
-  korisnik.novcanik += Math.round( dobitak * 1e2 ) / 1e2
-  listic.isplacen=true
-  
-}
-})
-korisnik.save()
-  })
-  
-  
-  })
-
-
+    console.log(req.headers["x-token"])
+    console.log(req.body.nesto)
 }
 
 
 exports.izracunajOkladu = (req,res) =>{
   
-const oklada = req.body
+const oklada = req.body.oklada
 var dobitnaOklada;
 Oklada.findById(oklada._id,(err,oklade)=>{
-  oklade.dobitniIndex=izracunOklade(req.body.sanse)
+  oklade.dobitniIndex=izracunOklade(oklada.sanse)
 dobitnaOklada=oklade
   oklade.save()
  

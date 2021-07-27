@@ -15,14 +15,16 @@ export const userActions = {
 
 function isADMIN(token){
     return dispatch =>{
-        
+        dispatch(request(token));
         userService.isAdmin(token)
         .then(() =>dispatch(success()))
 
 
 
     }
+    function request(token) { return { type: "TOKEN_POKUŠAJ", token } }
     function success(token) { return { type: "TOKEN_PROVJERA", token } }
+    
 }
 
 function register(user) {
@@ -56,9 +58,10 @@ function login(username, password) {
         userService.login(username, password)
             .then(
                 user => { 
-                    console.log("dobiveni koriswnik",user)
+                 
                     dispatch(success(user));
                     history.push('/home');
+                    window.location.reload();
                 },
                 error => {
                     dispatch(failure(error));

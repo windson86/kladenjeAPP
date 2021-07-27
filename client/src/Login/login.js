@@ -8,8 +8,8 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        // reset login status
-        //this.props.logout();
+        
+        this.props.logout();
 
         this.state = {
             username: '',
@@ -76,6 +76,7 @@ function mapState(state) {
 }
 
 const actionCreators = {
+    isAdmin : userActions.isADMIN,
     login: userActions.login,
     logout: userActions.logout
 };
