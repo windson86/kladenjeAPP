@@ -3,7 +3,7 @@ import { userService } from "../servisi/korisnicki.servisi";
 import Button from "react-bootstrap/Button";
 import { BsFillXCircleFill } from "react-icons/bs";
 import { BsCheckBox } from "react-icons/bs";
-
+import Footer from "../Footer/Footer";
 import {
   Col,
   Container,
@@ -72,14 +72,19 @@ export default class Home extends React.Component {
   }
   dodajKune(iznos) {
     userService.zahtjevUplate(user.username, iznos);
+    this.ispisAlerta("zahtjev poslan administratoru");
+  }
+  ispisAlerta(text) {
+    this.setState({
+      alertOn: true,
+      alertText: text,
+    });
   }
 
   brisiListic(e) {
     this.setState({
       parovi: [],
       ukupniKef: 1,
-      alertText: "Obrisano",
-      alertOn: true,
     });
   }
   igrajListic() {
@@ -89,12 +94,11 @@ export default class Home extends React.Component {
       .igrajListic(ulog, parovi, this.calculateKoef(parovi), user.id)
       .then((res) => {
         this.setState({
-          alertText: res.poruka,
-          alertOn: true,
           listic: [],
           parovi: [],
           ulog: 0,
         });
+        this.ispisAlerta(res.poruka);
       });
   }
 
@@ -195,7 +199,7 @@ export default class Home extends React.Component {
         </Row>
 
         <Row>
-          <Col>
+          <Col xs={8}>
             <div className="text-white">oklade:</div>
 
             <ListGroup className="bg-secondary">
@@ -284,6 +288,7 @@ export default class Home extends React.Component {
             </Card>
           ))}
         </Row>
+        <Footer></Footer>
       </Container>
     );
   }

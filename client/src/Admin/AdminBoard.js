@@ -30,7 +30,7 @@ export default class AdminBoard extends React.Component {
     userService.prikazsvihSlobodnihOklada().then((odgovor) => {
       this.setState({ oklade: odgovor });
     });
-    userService.prikazsvihUplataZahtjeva().then((odgovor) => {
+    userService.prikazsvihUplataZahtjeva(user).then((odgovor) => {
       this.setState({ uplate: odgovor });
     });
   }

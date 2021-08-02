@@ -35,6 +35,7 @@ exports.sveUplate = (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
+
     res.send(uplate);
   });
 };

@@ -39,7 +39,7 @@ module.exports = function (app) {
     okladeKontroler.izbrisiListic
   );
 
-  app.post("/api/isAdmin", [authJwt.verifyToken], kontroler.isAdmin);
+  app.post("/api/isAdmin", kontroler.isAdmin);
 
   app.post(
     "/api/dodajOkladu",
@@ -57,7 +57,11 @@ module.exports = function (app) {
 
   app.post("/api/getAccbyID", [authJwt.verifyToken], kontroler.GetAccByID);
 
-  app.get("/api/get/allUplate", [authJwt.verifyToken], kontroler.sveUplate);
+  app.get(
+    "/api/get/allUplate",
+    [authJwt.verifyToken, provjeraRegistracije.provjeraAdmina],
+    kontroler.sveUplate
+  );
 
   app.get(
     "/api/get/allOklade",

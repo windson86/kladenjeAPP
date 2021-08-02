@@ -85,8 +85,12 @@ async function odradiUplatu(id) {
   return odgovor;
 }
 
-async function prikazsvihUplataZahtjeva() {
-  const response = await fetch("/api/get/allUplate");
+async function prikazsvihUplataZahtjeva(user) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader(),
+  };
+  const response = await fetch("/api/get/allUplate", requestOptions);
   return handleResponse(response);
 }
 
