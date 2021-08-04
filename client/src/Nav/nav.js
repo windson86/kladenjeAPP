@@ -22,7 +22,6 @@ export default class Nav extends React.Component {
   render() {
     const { isAdmin } = this.state;
 
-    console.log("IS ADMIN:", isAdmin);
     return (
       <Container className=" bg-secondary container-fluid border-primary">
         <nav className="Nav ">

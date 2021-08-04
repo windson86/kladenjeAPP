@@ -22,8 +22,9 @@ module.exports = function (app) {
 
   app.post(
     "/api/izracunajOkladu",
-    [provjeraRegistracije.provjeraAdmina],
     [authJwt.verifyToken],
+    [provjeraRegistracije.provjeraAdmina],
+
     okladeKontroler.izracunajOkladu
   );
 

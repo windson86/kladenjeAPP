@@ -26,6 +26,7 @@ exports.test = (req, res) => {
 
 exports.izracunajOkladu = (req, res) => {
   const oklada = req.body.oklada;
+  console.log("??", req.body);
   var dobitnaOklada;
   Oklada.findById(oklada._id, (err, oklade) => {
     oklade.dobitniIndex = izracunOklade(oklada.sanse);

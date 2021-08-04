@@ -4,6 +4,9 @@ import Button from "react-bootstrap/Button";
 import { BsFillXCircleFill } from "react-icons/bs";
 import { BsCheckBox } from "react-icons/bs";
 import Footer from "../Footer/Footer";
+
+import { withTranslation } from "react-i18next";
+
 import {
   Col,
   Container,
@@ -16,7 +19,7 @@ import {
 
 let user = JSON.parse(localStorage.getItem("user")) || [];
 
-export default class Home extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
 
@@ -33,6 +36,7 @@ export default class Home extends React.Component {
       listic: [],
       parovi: [],
     };
+
     this.promjenaUloga = this.promjenaUloga.bind(this);
     this.makniPar = this.makniPar.bind(this);
     this.brisiListic = this.brisiListic.bind(this);
@@ -45,7 +49,7 @@ export default class Home extends React.Component {
 
     if (value > -1) {
       parovi.splice(value, 1);
-      console.log(parovi);
+
       this.setState({
         parovi: parovi,
       });
@@ -75,9 +79,11 @@ export default class Home extends React.Component {
     this.ispisAlerta("zahtjev poslan administratoru");
   }
   ispisAlerta(text) {
+    const { t } = this.props;
+
     this.setState({
       alertOn: true,
-      alertText: text,
+      alertText: t(text),
     });
   }
 
@@ -160,7 +166,6 @@ export default class Home extends React.Component {
     }
   }
   deleteListicFromDatabase(e) {
-    console.log("target", e.target.value);
     userService.obrisiListic(user.id, e.target.value);
   }
 
@@ -174,15 +179,27 @@ export default class Home extends React.Component {
   }
 
   render() {
+    const { t, i18n } = this.props;
     const { oklade, sviListici, ulog, porez, parovi, isUser } = this.state;
-
+    const changeLanguage = (lng) => {
+      i18n.changeLanguage(lng);
+    };
     return (
       <Container fluid="md" className="bg-secondary">
+        <div className="App-header text-white">
+          <h2>
+            {t("welcome")}
+
+            {user.ime}
+          </h2>
+          <button onClick={() => changeLanguage("de")}>de</button>
+          <button onClick={() => changeLanguage("en")}>en</button>
+          <button onClick={() => changeLanguage("hr")}>hr</button>
+        </div>
         {this.AlertSuccessDismissible()}
         <Row>
           <Col>
             <div className="text-white">
-              <div>{user.username}</div>
               <div>{this.state.novcanik.toFixed(2)} Kn</div>
               {isUser && (
                 <Button
@@ -191,7 +208,7 @@ export default class Home extends React.Component {
                     this.dodajKune(50);
                   }}
                 >
-                  dodaj 50 Kuna
+                  {t("Add funds")}
                 </Button>
               )}
             </div>
@@ -200,7 +217,7 @@ export default class Home extends React.Component {
 
         <Row>
           <Col xs={8}>
-            <div className="text-white">oklade:</div>
+            <div className="text-white">{t("bets")}:</div>
 
             <ListGroup className="bg-secondary">
               {oklade.map((oklade, index) => (
@@ -233,7 +250,7 @@ export default class Home extends React.Component {
           </Col>
           <Col>
             <div className="sticky-top">
-              <span className="text-white">listić:</span>
+              <span className="text-white">{t("betting slip")}:</span>
               <br />
               {parovi.map((par, index) => (
                 <div className="text-white">
@@ -247,9 +264,12 @@ export default class Home extends React.Component {
               <span className="text-white">
                 koef:{this.calculateKoef(parovi)}
               </span>
-              <Button onClick={() => this.brisiListic()}>obrisi listić</Button>
+              <Button onClick={() => this.brisiListic()}>
+                {t("clear betting slip")}
+              </Button>
               <input
                 type="number"
+                label="ulog"
                 className="text-white form-control bg-secondary"
                 name="ulog"
                 value={ulog}
@@ -257,14 +277,14 @@ export default class Home extends React.Component {
               />
               {isUser && (
                 <Button onClick={() => this.igrajListic()}>
-                  odigraj listić
+                  {t("subbmit betting slip")}
                 </Button>
               )}
             </div>
           </Col>
         </Row>
         <Row>
-          <span className="text-white">listići:</span>
+          <span className="text-white">{t("betting slips")}:</span>
           {sviListici.map((listici, index) => (
             <Card body className="text-white bg-secondary">
               <Button
@@ -293,3 +313,4 @@ export default class Home extends React.Component {
     );
   }
 }
+export default withTranslation("translations")(Home);
