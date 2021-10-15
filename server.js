@@ -7,10 +7,14 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  process.env.MONGODB_URI ||
+    `mongodb+srv://admin:admin@oblak.qnbmf.mongodb.net/gradevina?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 mongoose.connection.on("connected", () => {
   console.log("mongoDB spojen");
