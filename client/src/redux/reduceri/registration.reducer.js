@@ -1,4 +1,4 @@
-import { userKonstante } from '../konstante/korisnicke.konstante';
+import { userKonstante } from "../konstante/korisnicke.konstante";
 
 export function registration(state = {}, action) {
   switch (action.type) {
@@ -9,6 +9,6 @@ export function registration(state = {}, action) {
     case userKonstante.REGISTER_FAILURE:
       return {};
     default:
-      return state
+      return state;
   }
 }

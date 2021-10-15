@@ -84,6 +84,7 @@ export default class AdminBoard extends React.Component {
     userService.izracunOklade(oklada, user).then((odgovor) => {
       console.log("respond servera:", odgovor);
     });
+    window.location.reload();
   }
 
   handleBrisanjeUplate(id) {}

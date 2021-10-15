@@ -221,13 +221,17 @@ class Home extends React.Component {
 
             <ListGroup className="bg-secondary">
               {oklade.map((oklade, index) => (
-                <div>
+                <div key={index}>
                   <ListGroupItem className="bg-info" key={oklade.id}>
                     {oklade.opisOklade}
                     <span>
                       {" "}
                       {oklade.sanse.map((sanse, index) => (
-                        <Card body className="bg-secondary text-white">
+                        <Card
+                          body
+                          key={index}
+                          className="bg-secondary text-white"
+                        >
                           <span className="d-flex justify-content-center">
                             koef {(100 / sanse - porez).toFixed(2)}
                             <Button
@@ -253,7 +257,7 @@ class Home extends React.Component {
               <span className="text-white">{t("betting slip")}:</span>
               <br />
               {parovi.map((par, index) => (
-                <div className="text-white">
+                <div key={index} className="text-white">
                   {par.opisOklade} TIP: {par.odigraniTip} - koef{" "}
                   {par.koef.toFixed(2)}
                   <Button value={index} onClick={this.makniPar}>
@@ -286,7 +290,7 @@ class Home extends React.Component {
         <Row>
           <span className="text-white">{t("betting slips")}:</span>
           {sviListici.map((listici, index) => (
-            <Card body className="text-white bg-secondary">
+            <Card body key={index} className="text-white bg-secondary">
               <Button
                 value={listici._id}
                 onClick={this.deleteListicFromDatabase}
@@ -295,7 +299,7 @@ class Home extends React.Component {
               </Button>
               <br />
               {listici.parovi.map((parovi, index) => (
-                <span>
+                <span key={index}>
                   {" "}
                   {parovi.opisOklade}
                   TIP:{parovi.odigraniTip} <br />

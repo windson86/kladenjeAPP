@@ -77,7 +77,7 @@ exports.isAdmin = (req, res) => {
     }
   });
 };
-
+//petrovic1986+paypal@gmail.com
 exports.GetAccByID = (req, res) => {
   Kladitelj.findOne({ _id: req.userId }).exec((err, kladitelj) => {
     if (err) {
@@ -95,7 +95,6 @@ exports.GetAccByID = (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  console.log(req.body.username);
   Kladitelj.findOne({ username: req.body.username }).exec((err, kladitelj) => {
     if (err) {
       res.status(500).send({ message: err });

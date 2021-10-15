@@ -21,12 +21,12 @@ function izracunOklade(sanseArray) {
 
 exports.test = (req, res) => {
   console.log(req.headers["x-token"]);
-  console.log(req.body.nesto);
+  console.log(req.body);
 };
 
 exports.izracunajOkladu = (req, res) => {
   const oklada = req.body.oklada;
-  console.log("??", req.body);
+
   var dobitnaOklada;
   Oklada.findById(oklada._id, (err, oklade) => {
     oklade.dobitniIndex = izracunOklade(oklada.sanse);
@@ -47,7 +47,7 @@ exports.izracunajOkladu = (req, res) => {
                     for (let index = 0; index < listic.parovi.length; index++) {
                       dobitni.push(listic.parovi[index].pogoden);
                     }
-                    console.log(dobitni, korisnik.username);
+
                     if (Object.values(dobitni).every(Boolean)) {
                       var a = listic.ulog;
                       var b = listic.koef;
@@ -57,7 +57,6 @@ exports.izracunajOkladu = (req, res) => {
                       }
                       listic.isplacen = true;
                       listic.dobitni = true;
-                      console.log("dobitni");
                     }
                   }
                 }
